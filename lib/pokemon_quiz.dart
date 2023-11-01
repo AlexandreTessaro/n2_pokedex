@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PokemonQuiz extends StatefulWidget {
   @override
@@ -32,7 +33,6 @@ class _PokemonQuizState extends State<PokemonQuiz> {
   void _nextQuestion() {
     if (questionsAnswered < 10) {
       final random = Random();
-      final correctIndex = random.nextInt(4);
       correctPokemon = pokemonList[random.nextInt(pokemonList.length)];
 
       questionOptions = [];
@@ -134,9 +134,17 @@ class _PokemonQuizState extends State<PokemonQuiz> {
                             onPressed: () {
                               if (option == correctPokemon) {
                                 score++;
-                                // Show a success message
+                                Fluttertoast.showToast(
+                                  msg: "Acertou!",
+                                  gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.green,
+                                );
                               } else {
-                                // Show an error message
+                                Fluttertoast.showToast(
+                                  msg: "Errou. A resposta correta era $correctPokemon.",
+                                  gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                );
                               }
                               _nextQuestion();
                             },
@@ -156,6 +164,11 @@ class _PokemonQuizState extends State<PokemonQuiz> {
                   ),
                 ],
               ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Pergunta ${questionsAnswered + 0}/10',
+              style: TextStyle(fontSize: 16),
             ),
           ],
         ),
